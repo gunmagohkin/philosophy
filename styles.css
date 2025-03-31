@@ -1,0 +1,690 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    background-color: transparent;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo {
+    width: 60px;
+    height: auto;
+    position: absolute;   /* Position it absolutely */
+    top: 5px;           /* Move it slightly above the book */
+    left: 10px;         /* Position it outside the book on the right */
+    z-index: 5;           /* Ensure it's on top of the book */
+    backface-visibility: hidden; /* Hides the logo on the back side */
+    transition: opacity 0.5s ease-in-out;
+}
+
+.book {
+    width: 350px; /* Reduced from 500px */
+    height: 500px; /* Reduced from 700px */
+    position: relative;
+    transition-duration: 1s;
+    perspective: 1500px; /* Add perspective for 3D effect */
+    background-color: #2e3537; /* Match background color to body */
+    border-radius: 0 15px 15px 0; /* Rounded corners for the book */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Add shadow to the book */
+}
+
+input {
+    display: none;
+}
+
+.cover, .back-cover {
+    background-color: #4173a5;
+    width: 100%;
+    height: 100%;
+    border-radius: 0 15px 15px 0;
+    box-shadow: 0 0 5px rgb(41, 41, 41);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-origin: center left;
+    
+}
+
+.cover {
+    position: absolute;
+    z-index: 4;
+    transition: transform 1s;
+}
+
+.cover h1 {
+    font-size: 40px; /* Reduced font size for the cover title */
+    color: white;
+    font-weight: bold;
+    line-height: 1.3;
+    text-align: left;
+    padding: 20px;
+    margin: 0;
+    box-sizing: border-box;
+}
+   
+.cover label {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.back-cover {
+    position: relative;
+    z-index: -1;
+}
+
+.page {
+    position: absolute;
+    background-color: white;
+    width: 330px; /* Reduced from 480px */
+    height: 480px; /* Reduced from 680px */
+    border-radius: 0 15px 15px 0;
+    margin-top: 10px;
+    transform-origin: left;
+    transform-style: preserve-3d;
+    transform: rotateY(0deg);
+    transition-duration: 1.5s;
+}
+
+
+.front-page {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    box-sizing: border-box;
+    padding: 1rem;
+}
+
+.back-page {
+    transform: rotateY(180deg);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    z-index: 99;
+}
+
+.next, .prev {
+    position: absolute;
+    bottom: 1em;
+    cursor: pointer;
+    color: #4173a5; /* Button text color */
+    transition: text-shadow 0.3s ease-in-out; /* Transition for shadow */
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.8); /* Static white shadow for visibility */
+}
+
+.next {
+    right: 1em; /* Align to the right side */
+}
+
+.prev {
+    left: 1em; /* Align to the left side */
+}
+
+/* Remove hover effects that affect button text visibility */
+.prev p, .next p {
+    color: #4173a5; /* Keep the text color consistent */
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.8); /* Static shadow */
+}
+
+/* Hover Effects */
+.next:hover {
+    color: #002b59;
+}
+
+.prev:hover {
+    color: #002b59;
+}
+
+#page1 {
+    z-index: 3;
+}
+
+#page2 {
+    z-index: 2;
+}
+
+#page3 {
+    z-index: 1;
+}
+
+/* Page 4 Styling */
+#page4 {
+    z-index: 0;
+}
+
+
+#checkbox-cover:checked ~ .book .cover .logo {
+    opacity: 0;  /* Hide logo when cover is flipped */
+    transition: opacity 0s ease-in-out 0.4s;
+}
+
+#checkbox-cover:checked ~ .book {
+    transform: translateX(150px); /* Adjusted for smaller book size */
+}
+
+#checkbox-cover:checked ~ .book .cover {
+    transition: transform 1.5s, z-index 0.5s 0.5s;
+    transform: rotateY(-180deg);
+    z-index: 1;
+}
+
+#checkbox-cover:checked ~ .book .cover h1 {
+    opacity: 0; /* Hide smoothly when opening */
+    transition: opacity 0s ease-in-out 0.4s;
+}
+
+/* Ensure title reappears ONLY after the cover is fully closed */
+#checkbox-cover:not(:checked) ~ .book .cover h1 {
+    opacity: 1; /* Show smoothly */
+    transition: opacity 0.1s ease-in-out .3s; /* Delay reappearance until flip is done */
+}
+
+#checkbox-cover:checked ~ .book .page {
+    box-shadow: 0 0 3px rgb(99, 98, 98);
+}
+
+#checkbox-page1:checked ~ .book #page1 {
+    transform: rotateY(-180deg);
+    z-index: 2;
+}
+
+#checkbox-page2:checked ~ .book #page2 {
+    transform: rotateY(-180deg);
+    z-index: 3;
+}
+
+#checkbox-page3:checked ~ .book #page3 {
+    transform: rotateY(-180deg);
+    z-index: 4;
+}
+
+#checkbox-page4:checked ~ .book #page4 {
+    transform: rotateY(-180deg);
+    z-index: 5;
+    transition: transform 1.5s, z-index 0.5s;
+
+}
+
+/* Page 1 Styling */
+#page1 .front-page {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #f9f9f9;
+    border-radius: 0 15px 15px 0;
+}
+
+#page1 .welcome-section h2 {
+    font-size: 20px; /* Reduced font size for the welcome heading */
+    color: #4173a5;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+#page1 .intro-text {
+    font-size: 16px; /* Reduced font size for the intro text */
+    line-height: 1.6;
+    color: #333;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+#page1 .icon-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+#page1 .icon-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+#page1 .icon-item i {
+    font-size: 18px; /* Reduced icon size */
+    color: #4173a5;
+    background-color: #e0f2ff;
+    padding: 8px;
+    border-radius: 50%;
+}
+
+#page1 .icon-item p {
+    font-size: 16px; /* Reduced font size for icon text */
+    color: #555;
+    margin: 0;
+}
+
+#page1 .icon-item strong {
+    color: #4173a5;
+}
+
+#page1 .next {
+    position: absolute;
+    bottom: 1em;
+    right: 1em;
+    cursor: pointer;
+    color: #4173a5;
+    font-weight: bold;
+}
+
+#page1 .next:hover {
+    color: #002b59;
+}
+
+#page1 .prev {
+    position: absolute;
+    bottom: 1em;
+    right: 1em;
+    cursor: pointer;
+    color: #4173a5;
+    font-weight: bold;
+}
+
+#page1 .prev:hover {
+    color: #002b59;
+}
+
+#page1 .back-page {
+    transform: rotateY(180deg);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #f9f9f9;
+    padding: 1rem;
+    box-sizing: border-box;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99;
+    border-radius: 15px 0 0 15px;
+}
+
+#page1 .back-text-content {
+    text-align: center;
+    color: #333;
+}
+
+#page1 .back-text-content h3 {
+    font-size: 18px; /* Reduced font size for back page heading */
+    color: #4173a5;
+    margin-bottom: 1rem;
+}
+
+#page1 .back-text-content p {
+    font-size: 14px; /* Reduced font size for back page text */
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 1.5rem;
+}
+
+/* Page 2 Styling */
+#page2 .front-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 0 15px 15px 0;
+}
+
+#page2 .welcome-section h2 {
+    font-size: 20px; /* Reduced font size for the welcome heading */
+    color: #4173a5;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+#page2 .icon-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+#page2 .icon-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+#page2 .icon-item i {
+    font-size: 18px; /* Reduced icon size */
+    color: #4173a5;
+    background-color: #e0f2ff;
+    padding: 8px;
+    border-radius: 50%;
+}
+
+#page2 .icon-item p {
+    font-size: 14px; /* Reduced font size for icon text */
+    color: #4173a5;
+    margin: 0;
+}
+
+#page2 .icon-item strong {
+    font-size: 14px; /* Reduced font size for icon text */
+    color:#4173a5;
+    margin: 0;
+}
+
+
+#page2 .back-text-content  strong {
+    color: #4173a5;
+}
+
+#page2 .back-page {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #f9f9f9;
+    padding: 10px;
+    box-sizing: border-box;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 99;
+    border-radius: 15px 0 0 15px;
+    flex-direction: column;
+}
+
+
+
+/* Heading Styling */
+#page2 .back-text-content h3 {
+    font-size: 28px;  /* Reduced size for better readability */
+    color: #4173a5;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* Paragraph Styling */
+#page2 .back-text-content p {
+    font-size: 18px;   /* More readable text size */
+    line-height: 1;
+    color: #555;
+    text-align: justify;  /* More professional alignment */
+    margin-bottom: 1rem;
+}
+
+/* Span Styling */
+#page2 .back-text-content span {
+    font-size: 18px;
+    color: #4173a5;
+    font-weight: bold;
+}
+
+ /* Page 3 Styling */
+ #page3 .front-page {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #f9f9f9;
+    border-radius: 0 15px 15px 0;
+}
+
+
+#page3 .welcome-section h2 {
+    font-size: 28px;  /* Reduced size for better readability */
+    color: #4173a5;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+
+
+#page3 .icon-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+#page3 .icon-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+#page3 .icon-item i {
+    font-size: 18px; /* Reduced icon size */
+    color: #4173a5;
+    background-color: #e0f2ff;
+    padding: 8px;
+    border-radius: 50%;
+}
+
+#page3 .icon-item p {
+    font-size: 13px; /* Reduced font size for icon text */
+    color: #555;
+    margin: 0;
+}
+
+#page3 .hiring-steps strong {
+    color: #4173a5;
+}
+
+#page3 .step p {
+    font-size: 18px; /* Reduced font size for step text */
+    color: #555;
+}
+
+#page3 .back-page {
+    transform: rotateY(180deg);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #f9f9f9;
+    padding: 1rem;
+    box-sizing: border-box;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    z-index: 99;
+    border-radius: 15px 0 0 15px;
+}
+
+
+/* Styling for Page 3 Back Page Content */
+#page3 .back-text-content {
+
+    color: #333; 
+    padding: 10px; /* Consistent padding */
+}
+
+#page3 .back-text-content h3 {
+    font-size: 24px;  /* Reduced size for better readability */
+    color: #4173a5;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+#page3 .back-text-content p {
+    font-size: 14px; /* Reduced font size for back page text */
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 1rem;
+    text-align: justify;
+}
+
+
+.open-button {
+    position: absolute;
+    bottom: 10px;                  /* Positioned near the bottom */
+    right: 2px;                   /* Positioned towards the right */
+    z-index: 10;
+    width: 50px;
+    height: 50px;
+    display: flex;                  /* Use flexbox for perfect centering */
+    justify-content: center;        
+    align-items: center;            
+    transition: background 0.3s, transform 0.3s;
+    cursor: pointer;
+}
+
+.open-button:hover {
+    background-color: #4173a5;
+    color: white;
+    transform: scale(1.1);         /* Hover effect */
+}
+
+.open-button i {
+    font-size: 24px;                /* Adjusted font size */
+    line-height: 1;                 /* Remove extra line spacing */
+    display: inline-block;          /* Ensure consistent positioning */
+    vertical-align: middle;         /* Perfectly center vertically */
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 10px;
+}
+
+.pyramid-img {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.pyramid-img:hover {
+    transform: scale(2); /* Slight zoom on hover */
+}
+
+
+#page4 .policy-list li {
+    font-size: 18px; /* Reduced font size for step text */
+    color: #555;
+    line-height: auto;
+}
+
+#page4 .back-page {
+    transform: rotateY(180deg);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #f9f9f9;
+    padding: 1rem;
+    box-sizing: border-box;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 99;
+    border-radius: 15px 0 0 15px;
+    flex-direction: column; /* Added to match the other pages */
+}
+
+
+/* Styling for Page 3 Back Page Content */
+#page4 .back-text-content {
+    color: #333; 
+    padding: 10px; /* Consistent padding */
+}
+
+#page4 .back-text-content h3 {
+    font-size: 22px;  /* Reduced size for better readability */
+    color: #4173a5;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+#page4 .back-text-content p {
+    font-size: 14px; /* Reduced font size for back page text */
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 1rem;
+    text-align: justify;
+}
+
+#page4 .front-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 0 15px 15px 0;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+}
+
+/* Front Page Styling */
+#page4 .front-page h2, #page4 .back-text-content h3 {
+    font-size: 24px;
+    color: #4173a5;
+    text-align: center;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+#page4 .front-page p, #page4 .back-text-content p {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #4173a5;
+    text-align: justify;
+    margin-bottom: 1rem;
+}
+
+#page4 .back-text-content p {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #555;
+    text-align: justify;
+    margin-bottom: 1rem;  
+}
+
+#page4 .welcome-section p {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #555;
+    text-align: justify;
+    margin-bottom: 1rem;
+}
+
+/* Policy List Styling */
+#page4 .policy-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+
+/* Navigation Buttons */
+#page4 .next, #page4 .prev {
+    position: absolute;
+    bottom: 1em;
+    cursor: pointer;
+    color: #4173a5;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+#page4 .next {
+    right: 1em;
+}
+
+#page4 .prev {
+    left: 1em;
+}
+
+#page4 .next:hover, #page4 .prev:hover {
+    color: #002b59;
+}
